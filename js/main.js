@@ -4,8 +4,6 @@ const NUM_OF_BOMB = 5;
 const TILE_WIDTH = 40;
 const TILE_HEIGHT = 40;
 
-
-
 window.onload = function(){
 	init();
 }
@@ -28,7 +26,7 @@ function init(){
 			tile.style.height = TILE_HEIGHT;
 			tile.id = index;
 			tile.innerText = "";
-			tile.addEventListener('click', clickEvent , false);
+			tile.addEventListener('mousedown', clickEvent , false);
 			index ++;
 			document.body.appendChild(tile);
 		}
@@ -36,6 +34,18 @@ function init(){
 }
 
 function clickEvent(e){
-	console.log(this);
+	var str = "";
+	switch (e.button) {
+		case 0 :
+		    str = "left click";
+		    break;
+		case 1 :
+		    str = "middle click";
+		    break;
+		case 2 :
+		    str = "right click";
+   		break;
+    }
+	console.log(str);
 }
 
