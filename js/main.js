@@ -39,6 +39,7 @@ var Tile = (function() {
   var p = Tile.prototype;
 
   p.check = function(){
+  	if(this.opened)return;
   	this.checked = !this.checked;
   	console.log(this.checked);
   	if(this.checked){
@@ -49,7 +50,6 @@ var Tile = (function() {
   }
 
   p.open = function(){
-  	if(this.checked)return;
   	this.opened = true;
   	if(this.isBomb){
   		this.tile.style.backgroundColor = 'red';
@@ -100,7 +100,39 @@ var TileManager = (function() {
   }
 
   p.open = function(index){
-  	this.getTile(Number(index)).open();
+  	var tile = this.getTile(Number(index));
+  	if(tile.checked)return;
+  	tile.open();
+  	if(tile.isBomb || (tile.value != 0))return;
+  	//タイルが0の時
+
+
+  	var tilesToCheck = new Array();
+  	var bombCount = 0;
+  	tilesToCheck.push(this.getTile(Number(index) - TILE_X_SIZE -1));
+  	tilesToCheck.push(this.getTile(Number(index) - TILE_X_SIZE));
+  	tilesToCheck.push(this.getTile(Number(index) - TILE_X_SIZE + 1));
+  	tilesToCheck.push(this.getTile(Number(index) - 1));
+  	tilesToCheck.push(this.getTile(Number(index) + 1));
+  	tilesToCheck.push(this.getTile(Number(index) + TILE_X_SIZE -1));
+  	tilesToCheck.push(this.getTile(Number(index) + TILE_X_SIZE));
+  	tilesToCheck.push(this.getTile(Number(index) + TILE_X_SIZE + 1));
+
+  	if(index % TILE_X_SIZE == 0){
+  		tilesToCheck[0] = false;
+  		tilesToCheck[3] = false;
+  		tilesToCheck[5] = false;
+  	}else if(index % TILE_X_SIZE == (TILE_X_SIZE - 1)){
+  		tilesToCheck[2] = false;
+  		tilesToCheck[4] = false;
+  		tilesToCheck[7] = false;
+  	}
+  	var self = this;
+  	tilesToCheck.forEach(function(tile,index,array){
+  		if(tile&&!tile.opened&&!tile.isBomb){
+  			self.open(self.tiles.indexOf(tile));
+  		}
+  	});
   }
 
   p.check = function(index){
@@ -294,9 +326,7 @@ function clickEvent(e){
 		    str = "middle click";
 		    break;
 		case 2 :
-			//tileManager.check(this.id);
-			//tileManager.countOpenedTIles();
-			console.log(gameManager.getTileValue(Number(this.id)));
+			tileManager.check(this.id);
 		    str = "right click";
    		break;
     }
