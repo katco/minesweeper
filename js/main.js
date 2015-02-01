@@ -202,6 +202,7 @@ var GameManager = (function() {
   p.getTileValue = function(index){
   	var tilesToCheck = new Array();
   	var bombCount = 0;
+  	
   	tilesToCheck.push(this.bombArray[index - TILE_X_SIZE -1]);
   	tilesToCheck.push(this.bombArray[index - TILE_X_SIZE]);
   	tilesToCheck.push(this.bombArray[index - TILE_X_SIZE + 1]);
@@ -210,6 +211,7 @@ var GameManager = (function() {
   	tilesToCheck.push(this.bombArray[index + TILE_X_SIZE -1]);
   	tilesToCheck.push(this.bombArray[index + TILE_X_SIZE]);
   	tilesToCheck.push(this.bombArray[index + TILE_X_SIZE + 1]);
+
   	if(index % TILE_X_SIZE == 0){
   		tilesToCheck[0] = false;
   		tilesToCheck[3] = false;
