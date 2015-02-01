@@ -5,3 +5,7 @@
 	text-align: center;
 	font-size: 10px;
 }
+
+.tile .checked{
+	background-color: rgb(255, 241, 15);
+}
