@@ -12,7 +12,7 @@ var Tile = (function() {
   var Tile = function(x, y, elem) {
     this.x = x;
     this.y = y;
-    this.elem = elem;
+    this.tile = elem;
     this.checked = false;
   };
 
@@ -20,15 +20,23 @@ var Tile = (function() {
 
   p.check = function(){
   	this.checked = !this.checked;
+  	console.log(this.checked);
   	if(this.checked){
-
+  		this.tile.style.backgroundColor = 'rgb(255, 241, 15)';
   	}else{
-
+  		this.tile.style.backgroundColor = 'rgb(238, 238, 238)';
   	}
+  }
+
+  p.open = function(){
+  	if(this.checked)return;
+
+  	
   }
   return Tile;
 })();
 /////
+
 
 /////Tile manage　クラス
 var TileManager = (function() {
@@ -44,14 +52,16 @@ var TileManager = (function() {
   	this.tiles.push(tile);
   };
 
-  p.get = function(index){
-  	console.log(this.tiles[Number(index)]);
-  	this.tiles[index];
+  p.getTile = function(index){
+  	return this.tiles[Number(index)];
   }
 
   return TileManager;
 })();
 /////	
+
+
+
 var tileManager = new TileManager();
 
 
@@ -92,14 +102,16 @@ function clickEvent(e){
 	switch (e.button) {
 		case 0 :
 		    str = "left click";
+		    console.log(tileManager.getTile(this.id));
 		    break;
 		case 1 :
+
 		    str = "middle click";
 		    break;
 		case 2 :
+			tileManager.getTile(this.id).check();
 		    str = "right click";
    		break;
     }
-	console.log(tileManager.get(this.id));
 }
 
