@@ -7,6 +7,22 @@ const TILE_HEIGHT = 40;
 
 
 /////Tileクラス
+
+/*
+
+##プロパティ##
+x:
+y:
+tile:
+checked:
+opened:
+isBomb:
+
+##メソッド##
+check:
+open:
+
+*/
 var Tile = (function() {
   // constructor
   var Tile = function(x, y, elem,isBomb) {
@@ -48,7 +64,21 @@ var Tile = (function() {
 /////
 
 
-/////Tile manage　クラス
+/////TileManager　クラス
+/*
+
+##プロパティ##
+tiles: Array
+finished: boolean
+
+##メソッド##
+addTile: 
+getTile:
+open:
+check:
+countOpenedTiles:
+
+*/
 var TileManager = (function() {
 
   // constructor
@@ -88,6 +118,19 @@ var TileManager = (function() {
 
 
 /////GameManager　クラス
+/*
+
+##プロパティ##
+
+tileManager: タイルマネージャーインスタンス
+bombArray: Array
+finished: boolean
+
+##メソッド##
+checkClear: 
+ クリア判定
+
+*/
 var GameManager = (function() {
 
   // constructor
