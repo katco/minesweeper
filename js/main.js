@@ -41,7 +41,7 @@ var Tile = (function() {
   p.check = function(){
   	if(this.opened)return;
   	this.checked = !this.checked;
-  	console.log(this.checked);
+
   	if(this.checked){
   		this.tile.style.backgroundColor = 'rgb(255, 241, 15)';
   	}else{
@@ -53,11 +53,9 @@ var Tile = (function() {
   	this.opened = true;
   	if(this.isBomb){
   		this.tile.style.backgroundColor = 'red';
-  		console.log("out");
   	}else{
   		this.tile.innerText = this.value;
   		this.tile.style.backgroundColor = 'rgb(160, 160, 160)';
-  		console.log("safe");
   	}
 
 
@@ -80,7 +78,7 @@ getTile:
 open:
 check:
 countOpenedTiles:
-
+checkBombIsOpend:
 */
 var TileManager = (function() {
 
@@ -171,8 +169,8 @@ bombArray: Array
 finished: boolean
 
 ##メソッド##
-checkClear: 
- クリア判定
+checkGameState: 
+ クリア・ゲームオーバー判定
 
 */
 var GameManager = (function() {
@@ -228,7 +226,6 @@ var GameManager = (function() {
 
   		}
   	});
-  	console.log(tilesToCheck);
   	return bombCount;
 
   }
@@ -285,7 +282,6 @@ function init(){
 		bombArray[j] = bombArray[r];
 		bombArray[r] = tmp;
 	}
-	console.log(bombArray);
 
 	
 	//タイルの生成、初期化
