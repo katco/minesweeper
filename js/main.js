@@ -94,11 +94,13 @@ var GameManager = (function() {
   var GameManager = function(tileManager_arg,bombArray_arg) {
   	this.tileManager = tileManager_arg;
   	this.bombArray = bombArray_arg;
+  	this.finished = false;
   };
 
   var p = GameManager.prototype;
 
   p.checkClear = function(){
+  	if(this.finished)return;
   	var numOfSafeTiles = TILE_X_SIZE * TILE_Y_SIZE - NUM_OF_BOMB;
   	var opened = this.tileManager.countOpenedTIles();
   	return opened >= numOfSafeTiles;
