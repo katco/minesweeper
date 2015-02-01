@@ -5,14 +5,6 @@ const TILE_WIDTH = 40;
 const TILE_HEIGHT = 40;
 
 /////Tileクラス
-function Tile(_x,_y,_elem)
-{
-    // プロパティ
-    this.x = x;
-    this.y = _y;
-    this.elem = _elem;
-
-}
 var Tile = (function() {
 
 
