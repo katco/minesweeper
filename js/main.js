@@ -17,6 +17,7 @@ tile:
 checked:
 opened:
 isBomb:
+value:
 
 ##メソッド##
 check:
@@ -25,9 +26,10 @@ open:
 */
 var Tile = (function() {
   // constructor
-  var Tile = function(x, y, elem,isBomb) {
+  var Tile = function(x, y, elem,isBomb,value) {
     this.x = x;
     this.y = y;
+    this.value = value;
     this.tile = elem;
     this.checked = false;
     this.opened = false;
@@ -53,6 +55,7 @@ var Tile = (function() {
   		this.tile.style.backgroundColor = 'red';
   		console.log("out");
   	}else{
+  		this.tile.innerText = this.value;
   		this.tile.style.backgroundColor = 'rgb(160, 160, 160)';
   		console.log("safe");
   	}
@@ -112,6 +115,7 @@ var TileManager = (function() {
   	return count;
   }
 
+
   return TileManager;
 })();
 /////	
@@ -146,7 +150,43 @@ var GameManager = (function() {
   	if(this.finished)return;
   	var numOfSafeTiles = TILE_X_SIZE * TILE_Y_SIZE - NUM_OF_BOMB;
   	var opened = this.tileManager.countOpenedTIles();
-  	return opened >= numOfSafeTiles;
+  	if(opened >= numOfSafeTiles){
+  		this.finished = true;
+  		alert("クリア");
+  	}
+  }
+
+  //ユーティリティ
+  p.getTileValue = function(index){
+  	var tilesToCheck = new Array();
+  	var bombCount = 0;
+  	tilesToCheck.push(this.bombArray[index - TILE_X_SIZE -1]);
+  	tilesToCheck.push(this.bombArray[index - TILE_X_SIZE]);
+  	tilesToCheck.push(this.bombArray[index - TILE_X_SIZE + 1]);
+  	tilesToCheck.push(this.bombArray[index - 1]);
+  	tilesToCheck.push(this.bombArray[index + 1]);
+  	tilesToCheck.push(this.bombArray[index + TILE_X_SIZE -1]);
+  	tilesToCheck.push(this.bombArray[index + TILE_X_SIZE]);
+  	tilesToCheck.push(this.bombArray[index + TILE_X_SIZE + 1]);
+  	if(index % TILE_X_SIZE == 0){
+  		tilesToCheck[0] = false;
+  		tilesToCheck[3] = false;
+  		tilesToCheck[5] = false;
+  	}else if(index % TILE_X_SIZE == (TILE_X_SIZE - 1)){
+  		tilesToCheck[2] = false;
+  		tilesToCheck[4] = false;
+  		tilesToCheck[7] = false;
+  	}
+
+  	tilesToCheck.forEach(function(tile,index,array){
+  		if(tile){
+  			bombCount ++;
+
+  		}
+  	});
+  	console.log(tilesToCheck);
+  	return bombCount;
+
   }
 
   return GameManager;
@@ -182,7 +222,6 @@ function init(){
 	}
 
 	//上で作った配列の中身をランダムに並び替える
-	//並び替えなので、数字は重複しません
 	for(var j = numOfTile - 1; j >= 0; j--) {
 		var r = Math.floor(Math.random() * numOfTile);
 		var tmp = bombArray[j];
@@ -194,7 +233,6 @@ function init(){
 	
 	//タイルの生成、初期化
 	var index = 0;
-
 	for(var i=0;i<TILE_Y_SIZE;i++){
 		for(var j=0;j<TILE_X_SIZE;j++){
 			var tile = document.createElement("div");
@@ -209,7 +247,7 @@ function init(){
 			tile.addEventListener('mousedown', clickEvent , false);
 			document.body.appendChild(tile);
 
-			var tmptile = new Tile(j,i,tile,bombArray[index]);
+			var tmptile = new Tile(j,i,tile,bombArray[index],gameManager.getTileValue(index));
 			tileManager.addTile(tmptile);
 			index ++;
 		}
@@ -222,7 +260,10 @@ function clickEvent(e){
 	switch (e.button) {
 		case 0 :
 			tileManager.open(this.id);
-			console.log(gameManager.checkClear());
+			var gameClear = gameManager.checkClear();
+			if(gameClear){
+				alert("クリア");
+			}
 		    str = "left click";
 		    break;
 		case 1 :
@@ -230,8 +271,9 @@ function clickEvent(e){
 		    str = "middle click";
 		    break;
 		case 2 :
-			tileManager.check(this.id);
-			tileManager.countOpenedTIles();
+			//tileManager.check(this.id);
+			//tileManager.countOpenedTIles();
+			console.log(gameManager.getTileValue(Number(this.id)));
 		    str = "right click";
    		break;
     }
