@@ -4,26 +4,56 @@ const NUM_OF_BOMB = 5;
 const TILE_WIDTH = 40;
 const TILE_HEIGHT = 40;
 
+
+
 /////Tileクラス
 var Tile = (function() {
-
-
   // constructor
   var Tile = function(x, y, elem) {
     this.x = x;
     this.y = y;
     this.elem = elem;
+    this.checked = false;
   };
 
   var p = Tile.prototype;
 
-  // p.f1 = function() {
-  //   return true;
-  // };
+  p.check = function(){
+  	this.checked = !this.checked;
+  	if(this.checked){
 
+  	}else{
+
+  	}
+  }
   return Tile;
 })();
 /////
+
+/////Tile manage　クラス
+var TileManager = (function() {
+
+  // constructor
+  var TileManager = function() {
+    this.tiles = new Array();
+  };
+
+  var p = TileManager.prototype;
+
+  p.addTile = function(tile) {
+  	this.tiles.push(tile);
+  };
+
+  p.get = function(index){
+  	console.log(this.tiles[Number(index)]);
+  	this.tiles[index];
+  }
+
+  return TileManager;
+})();
+/////	
+var tileManager = new TileManager();
+
 
 window.onload = function(){
 	init();
@@ -50,6 +80,9 @@ function init(){
 			tile.addEventListener('mousedown', clickEvent , false);
 			index ++;
 			document.body.appendChild(tile);
+
+			var tmptile = new Tile(j,i,tile);
+			tileManager.addTile(tmptile);
 		}
 	}
 }
@@ -67,6 +100,6 @@ function clickEvent(e){
 		    str = "right click";
    		break;
     }
-	console.log(str);
+	console.log(tileManager.get(this.id));
 }
 
