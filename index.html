@@ -4,6 +4,29 @@
 <link rel='stylesheet' href="./css/main.css" />
 </head>
 <body>
+	<p>カラム数</p>
+	<div>
+	    <select id="num_of_colum">
+	      <option value="5">5×5</option>
+	      <option value="6">6×6</option>
+	      <option value="7">7×7</option>
+	      <option value="8">8×8</option>
+	      <option value="9">9×9</option>
+	    </select>
+	</div>
+	<p>爆弾の数</p>
+	<div>
+	    <select id="num_of_bomb">
+	      <option value="5">5個</option>
+	      <option value="6">6個</option>
+	      <option value="7">7個</option>
+	      <option value="8">8個</option>
+	      <option value="9">9個</option>
+	    </select>
+	</div>
+	<p>送信</p>
+    <input type="button" value="決定" onclick="onButtonClick();" />
+  </form>
 <script src="./js/main.js">
 </script>
 </body>

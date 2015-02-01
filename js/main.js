@@ -1,6 +1,6 @@
-const TILE_X_SIZE = 5;
-const TILE_Y_SIZE = 5;
-const NUM_OF_BOMB = 5;
+var TILE_X_SIZE = 5;
+var TILE_Y_SIZE = 5;
+var NUM_OF_BOMB = 5;
 const TILE_WIDTH = 40;
 const TILE_HEIGHT = 40;
 
@@ -115,6 +115,14 @@ var TileManager = (function() {
   	return count;
   }
 
+  p.checkBombIsOpend = function(){
+  	var bombIsOpened = false;
+  	this.tiles.forEach(function(tile, index, array){
+  		if(tile.opened && tile.isBomb) bombIsOpened = true;
+  	});
+  	return bombIsOpened;
+  }
+
 
   return TileManager;
 })();
@@ -146,11 +154,15 @@ var GameManager = (function() {
 
   var p = GameManager.prototype;
 
-  p.checkClear = function(){
+  p.checkGameState= function(){
   	if(this.finished)return;
   	var numOfSafeTiles = TILE_X_SIZE * TILE_Y_SIZE - NUM_OF_BOMB;
   	var opened = this.tileManager.countOpenedTIles();
-  	if(opened >= numOfSafeTiles){
+  	var isGameOver = this.tileManager.checkBombIsOpend();
+  	if(isGameOver){
+  		this.finished = true;
+  		alert("ゲームオーバー");
+  	}else if(opened >= numOfSafeTiles){
   		this.finished = true;
   		alert("クリア");
   	}
@@ -202,10 +214,23 @@ var bombArray = new Array();
 var gameManager = new GameManager(tileManager,bombArray);
 
 window.onload = function(){
+	//init();
+}
+
+function onButtonClick(){
+	var columSelect = document.getElementById("num_of_colum");
+	var bombSelect = document.getElementById("num_of_bomb");
+
+	TILE_X_SIZE = Number(columSelect.options[columSelect.selectedIndex].value);
+	TILE_Y_SIZE = Number(columSelect.options[columSelect.selectedIndex].value);
+
+	NUM_OF_BOMB = Number(bombSelect.options[bombSelect.selectedIndex].value);
 	init();
+
 }
 
 function init(){
+	document.body.innerText = "";
 	//右クリックのデフォルトの挙動のキャンセル
 	document.addEventListener("contextmenu", function(e){
 		e.preventDefault();
@@ -260,10 +285,8 @@ function clickEvent(e){
 	switch (e.button) {
 		case 0 :
 			tileManager.open(this.id);
-			var gameClear = gameManager.checkClear();
-			if(gameClear){
-				alert("クリア");
-			}
+			gameManager.checkGameState();
+	
 		    str = "left click";
 		    break;
 		case 1 :
